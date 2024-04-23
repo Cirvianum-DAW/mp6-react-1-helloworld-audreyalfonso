@@ -1,70 +1,85 @@
 import React, { useState } from "react";
 
-function Form(props) {
+const Form = (props) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [welcomeMessage, setWelcomeMessage] = useState("");
+  const [email, setEmail] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setWelcomeMessage(`Hola ${firstName} ${lastName}!`);
+  const handleClick = (event) => {
+    handleInputReset("", "", "");
     props.setPlacesDisponibles(props.placesActuals - 1);
+    const randomKey = Math.floor(1000 + Math.random() * 9000);
+    let id = randomKey;
+    props.setDetallsEstudiant({
+      key: id,
+      fname: firstName,
+      lname: lastName,
+      programGroup: props.tipusEstudiantSelect,
+      email: email,
+    });
+    event.preventDefault();
+  };
+
+  //change of input value set method
+  const handleInputChange = (setInput, event) => {
+    setInput(event.target.value);
+  };
+
+  //set input fields
+  const handleInputReset = (firstName, lastName, email) => {
+    setFirstName(firstName);
+    setLastName(lastName);
+    setEmail(email);
   };
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="flex flex-col items-center">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">
-          Detalls d'estudiant: {props.tipusEstudiantSelect}
-        </h1>
-
-        <form className="w-full max-w-sm" onSubmit={handleSubmit}>
-          <div className="mb-6">
-            <label
-              htmlFor="nom"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              Nom:
-            </label>
+    <div className="flex">
+      <form className="enrolForm w-3/4" name="enrolForm">
+        <ul className="ulEnrol">
+          <li>
             <input
+              className="border-1 mb-4 w-96 justify-center rounded-lg border-dotted border-black bg-gray-200 p-2"
               type="text"
-              id="nom"
-              name="nom"
-              className="form-input w-full border rounded-md shadow-sm bg-gray-200"
-              onBlur={(e) => setFirstName(e.target.value)}
+              name="firstname"
+              placeholder="Nom"
+              value={firstName}
+              onChange={(event) => handleInputChange(setFirstName, event)}
             />
-          </div>
-
-          <div className="mb-6">
-            <label
-              htmlFor="cognom"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              Cognom:
-            </label>
+          </li>
+          <li>
             <input
+              className="border-1 mb-4 w-96 justify-center rounded-lg border-dotted border-black bg-gray-200 p-2"
               type="text"
-              id="cognom"
-              name="cognom"
-              className="form-input w-full border rounded-md shadow-sm bg-gray-200"
-              onBlur={(e) => setLastName(e.target.value)}
+              name="lastname"
+              placeholder="Cognom"
+              value={lastName}
+              onChange={(event) => handleInputChange(setLastName, event)}
             />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md"
-          >
-            Submit
-          </button>
-
-          <label className="block w-full text-4xl mb-4 p-2" id="studentMsg">
-            {welcomeMessage}
-          </label>
-        </form>
-      </div>
+          </li>
+          <li>
+            <input
+              className="border-1 mb-4 w-96 justify-center rounded-lg border-dotted border-black bg-gray-200 p-2"
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={email}
+              onChange={(event) => handleInputChange(setEmail, event)}
+            />
+          </li>
+          <li>
+            <input
+              className="mb-4 w-96 justify-center rounded bg-blue-500 p-2 px-4 py-2 font-bold text-white hover:bg-blue-700"
+              type="submit"
+              name="Enrol"
+              alt="Enrol"
+              value="Inscripció"
+              onClick={handleClick}
+            />
+          </li>
+        </ul>
+      </form>
     </div>
   );
-}
+};
 
 export default Form;

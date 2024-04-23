@@ -1,56 +1,76 @@
 import React, { useState } from "react";
 import Form from "./components/Form";
+import StudentList from "./components/StudentList";
 
-function App() {
-  const [tipusEstudiant, setTipusEstudiant] = useState("no-graduat");
+const App = () => {
+  const [tipusEstudiant, setTipusEstudiant] = useState("No Graduat");
+  const [ngPlaces, setNGPlaces] = useState(60);
+  const [gPlaces, setGPlaces] = useState(40);
+
   const handleChange = (e) => {
     setTipusEstudiant(e.target.value);
   };
 
-  const [ngPlaces, setNGPlaces] = useState(60);
-  const [gPlaces, setGPlaces] = useState(40);
   const setPlacesDisponibles = (updatedPlaces) => {
-    console.log(updatedPlaces);
-    tipusEstudiant === "no-graduat"
-      ? setNGPlaces(updatedPlaces)
-      : setGPlaces(updatedPlaces);
+    tipusEstudiant === "Graduat"
+      ? setGPlaces(updatedPlaces)
+      : setNGPlaces(updatedPlaces);
   };
 
+  const [detallsEstudiant, setDetallEstudiants] = useState([]);
+
   return (
-    <div className="flex flex-col items-center justify-center gap-5 h-screen">
-      <div className="tipusEstudiant">
-
-        <label className="mr-2">
-          <b>Places Disponibles No Graduats: </b>
-          {ngPlaces}
-        </label>
-        <br></br>
-
-        <label className="mr-2">
-          <b>Places Disponibles Graduats: </b>
-          {gPlaces}
-        </label>
-        <br></br>
-
-        <label className="mr-2">
-          <b>Selecciona Tipus d'Estudiant: </b>
-        </label>
-        <select
-          className="appDropDown border rounded-md py-1 px-2"
-          onChange={handleChange}
-          value={tipusEstudiant}
-        >
-          <option value="no-graduat">No Graduat</option>
-          <option value="graduat">Graduat</option>
-        </select>
+    <div className="App flex h-screen flex-col items-center justify-center ">
+      <div className="programes my-2">
+        <h3 className="title my-2 text-2xl text-blue-500">
+          Formulari d'inscripció d'estudiants.
+        </h3>
+        <ul className="ulInscripcio ">
+          <li
+            className="parentLabels my-2 flex items-center justify-evenly"
+            onChange={handleChange}
+          >
+            <label className="radioLabel">
+              <input
+                type="radio"
+                value="No Graduat"
+                name="programGroup"
+                defaultChecked
+                className="radioInput mr-2"
+              />
+              No Graduat
+            </label>
+            <label className="radioLabel">
+              <input
+                type="radio"
+                value="Graduat"
+                name="programGroup"
+                className="radioInput mr-2"
+              />
+              Graduat
+            </label>
+          </li>
+          <li className="parentLabels my-2">
+            Places disponibles per estudiant{" "}
+            <strong>
+              {tipusEstudiant}:{" "}
+              {tipusEstudiant === "Graduat" ? gPlaces : ngPlaces}
+            </strong>
+          </li>
+        </ul>
       </div>
       <Form
         tipusEstudiantSelect={tipusEstudiant}
         setPlacesDisponibles={setPlacesDisponibles}
-        placesActuals={tipusEstudiant === "no-graduat" ? ngPlaces : gPlaces}
+        placesActuals={tipusEstudiant === "Graduat" ? gPlaces : ngPlaces}
+        setDetallsEstudiant={setDetallEstudiants}
+      />
+      <StudentList
+        detallsEstudiant={detallsEstudiant}
+        setDetallsEstudiant={setDetallEstudiants}
       />
     </div>
   );
-}
+};
 
 export default App;
